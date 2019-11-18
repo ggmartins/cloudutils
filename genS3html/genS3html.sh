@@ -26,7 +26,7 @@ if [ -f $index ];then
 fi
 touch $index
 echo "#!/bin/bash" > $wgets
-filelist=$(find . -type f | grep -v genS3html)
+filelist=$(find . -type f | grep -v genS3html | sort)
 echo "INFO: Generating index.html header"
 cat cloudutils/genS3html/genS3html.head.txt >> $index
 for i in  $filelist; do
@@ -39,7 +39,7 @@ for i in  $filelist; do
 	  echo -e "wget -c -nc $href" >> $wgets
         fi
 done
-echo "<a href=\"http://"$BUCKET_NAME".s3-website."$BUCKET_LOCA".amazonaws.com/"$wgets"\">WGET DOWNLOAD: wget.sh</a><br>" >> $index
+echo "<a href=\"http://"$BUCKET_NAME".s3-website."$BUCKET_LOCA".amazonaws.com/"$wgets"\">DOWNLOAD via script: wget.sh</a><br>" >> $index
 echo "INFO: Generating index.html footer"
 cat cloudutils/genS3html/genS3html.tail.txt >> $index
 echo "INFO: written files [$index] and [$wgets]"
