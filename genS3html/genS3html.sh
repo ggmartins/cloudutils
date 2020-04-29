@@ -4,18 +4,6 @@
 #use s3cmd sync or s3cmd put --recursive for dirs
 #use for i in $(ls *.csv); do tar cvzf $i.tgz $i; done to generate compressed files
 
-# run.sh # example
-##!/bin/bash
-#for i in $(find . -name "20*"); do
-#   cp -R cloudutils $i/
-#   cd $i/cloudutils/genS3html
-#   d=$(echo $i| sed "s/\.\///g")
-#   ./genS3html.sh projectbismark.net us-east-2 "csv\/$d"
-#   cd -
-#   aws s3 sync 2011/ s3://projectbismark.net/csv/$d --acl public-read
-#   rm -R $i/cloudutils
-#done
-
 cd ../../
 index=index.html
 wgets=wgets.sh
@@ -59,7 +47,8 @@ for i in  $filelist; do
 	  echo -e "wget -c -nc $href" >> $wgets
         fi
 done
-echo "<a href=\"http://"$BUCKET_NAME".s3-website."$BUCKET_LOCA".amazonaws.com/"$wgets"\">DOWNLOAD via script: wget.sh</a><br>" >> $index
+BUCKET_PATH2=$(echo $BUCKET_PATH | sed 's/\\\//\//g')
+echo "<a href=\"http://"$BUCKET_NAME".s3-website."$BUCKET_LOCA".amazonaws.com/"$BUCKET_PATH2"/"$wgets"\">DOWNLOAD via script: wget.sh</a><br>" >> $index
 echo "INFO: Generating index.html footer"
 cat cloudutils/genS3html/genS3html.tail.txt >> $index
 echo "INFO: written files [$index] and [$wgets]"
